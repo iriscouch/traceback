@@ -16,3 +16,6 @@ function last() {
 }
 
 start();
+
+if(require.main === module)
+  console.log('ok')
