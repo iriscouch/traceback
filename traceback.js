@@ -56,7 +56,7 @@ function raw_traceback(begin_func) {
   try {
     //console.error('Beginning capture')
     Error.captureStackTrace(getting_the_stack, begin_func)
-    Error.prepareStackTrace = raw_stack
+    Error.prepareStackTrace = prepareStackTrace_raw_stack
     stack = getting_the_stack.stack
   } catch (capture_er) {
     //console.error('= Capture error =')
@@ -75,7 +75,7 @@ function raw_traceback(begin_func) {
 }
 
 
-function raw_stack(er, stack) {
+function prepareStackTrace_raw_stack(er, stack) {
   if(getting_the_stack && er === getting_the_stack)
     return stack;
 
