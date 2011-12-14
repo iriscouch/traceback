@@ -12,4 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module.exports = require('./traceback')
+var API = require('./traceback')
+API.v8 = require('./lib/v8')
+
+module.exports = API
