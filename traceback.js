@@ -16,6 +16,7 @@ var util = require('util')
   , assert = require('assert')
 
 var frame = require('./lib/frame')
+  , v8 = require('./lib/v8')
 
 
 if(Error.prepareStackTrace)
@@ -87,6 +88,7 @@ function return_raw_stack(er, stack) {
     return Error.prepareStackTrace(er, stack)
   }
 
-  console.error('TODO returning .stack a second time')
-  return "Unknown stack trace";
+  //console.error('Returning to normal (deleted) Error.prepareStackTrace')
+  delete Error.prepareStackTrace
+  return v8.FormatStackTrace(er, stack)
 }

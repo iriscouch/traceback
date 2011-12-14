@@ -66,8 +66,6 @@ test('Failure to clean up with custom prepareStackTrace', function(t) {
   var traceback = require('../api')
   t.notOk('prepareStackTrace' in Error, 'No original prepare function yet')
 
-  Error.stackTraceLimit = 1000
-
   function prep(er, stack) {
     //console.error('prep running: ' + er.message + ': ' +
     //              stack.map(function(fr) {
@@ -115,4 +113,56 @@ test('Failure to clean up with custom prepareStackTrace', function(t) {
   t.equal(normal_err.stack, 'row 1\nrow 2\nrow 3', 'Stack from a throw should use my custom prep function')
 
   t.end()
+})
+
+test('Failure to clean up with no prepareStackTrace', function(t) {
+  // This assumes some details about the implementation but I think it's worth it.
+  var traceback = require('../api')
+
+  delete Error.prepareStackTrace
+  delete Error.original_prepareStackTrace
+  delete Error.prepST
+
+  t.notOk('prepareStackTrace' in Error, 'No old test prepare function')
+
+  Error.__defineGetter__('prepareStackTrace', function() { return this.prepST })
+  Error.__defineSetter__('prepareStackTrace', function(val) {
+    //console.error('setting prepareStackTrace: ' + util.inspect(val))
+    if(typeof val == 'undefined')
+      throw new Error('Causing an error when clearing prepareStackTrace')
+
+    this.prepST = val
+  })
+
+
+  var stack, err
+  try { stack = traceback() }
+  catch(er) { err = er }
+
+  // Compute the stack now before tap starts using Error objects again.
+  var err_stack = err.stack
+
+  t.notOk(stack, 'Stack was never set because restoring the preparer threw an exception')
+  t.ok(err, 'An error was thrown when running traceback due to the bomb')
+  t.equal(err.message, 'Causing an error when clearing prepareStackTrace', 'The bomb went off')
+
+  test_stack(err_stack, 'Causing an error when clearing prepareStackTrace')
+
+  var normal_err = new Error('I am a normal error')
+  test_stack(normal_err.stack, 'I am a normal error')
+
+  normal_err = null
+  try { throw new Error('A normal throw') }
+  catch (er) { normal_err = er }
+  test_stack(normal_err.stack, 'A normal throw')
+
+  t.end()
+
+  function test_stack(stack, message) {
+    stack = stack.split(/\n/)
+    t.ok(stack[0].match(new RegExp('Error: '+message+'$')), 'Correct first stack line')
+    t.ok(stack[1].match(/^    at /), 'Correct second stack line')
+    t.ok(stack[2].match(/^    at /), 'Correct third stack line')
+    t.ok(stack[3].match(/^    at /), 'Correct fourth stack line')
+  }
 })
