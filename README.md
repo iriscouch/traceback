@@ -46,6 +46,13 @@ API docs, TODO.
 Tests use [node-tap][tap]. If you clone this Git repository, tap is included.
 
     $ tap test
+    ok test/api.js ...................................... 286/286
+    ok test/fail.js ....................................... 35/35
+    ok test/format.js ....................................... 6/6
+    ok test/readme.js ....................................... 0/0
+    total ............................................... 331/331
+
+    ok
 
 ## License
 
