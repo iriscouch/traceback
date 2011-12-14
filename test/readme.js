@@ -1,6 +1,3 @@
-// Examples from the README
-//
-
 var traceback = require('../traceback');
 
 function start() { first() }
@@ -16,6 +13,7 @@ function last() {
 }
 
 start();
+
 
 if(require.main === module)
   console.log('ok')
