@@ -37,7 +37,6 @@ function traceback() {
   return stack.map(function(callsite) { return frame.make(callsite) })
 }
 
-
 var getting_the_stack = null
 
 function raw_traceback(begin_func) {
@@ -45,25 +44,26 @@ function raw_traceback(begin_func) {
 
   var stack = null
     , error = null
-    , old_prep = Error.prepareStackTrace
 
-  //if(Error.prepareStackTrace)
-  //  throw new Error('traceback: refusing to overwrite Error.prepareStackTrace')
+  if(Error.original_prepareStackTrace) // Should be quite rare
+    console.error('Traceback error detected: Error.original_prepareStackTrace exists')
+  else
+    Error.original_prepareStackTrace = Error.prepareStackTrace
 
-  //console.error('traceback()')
   getting_the_stack = {}
 
   try {
     //console.error('Beginning capture')
     Error.captureStackTrace(getting_the_stack, begin_func)
-    Error.prepareStackTrace = prepareStackTrace_raw_stack
-    stack = getting_the_stack.stack
+    Error.prepareStackTrace = return_raw_stack
+    stack = getting_the_stack.stack // This actually calls the prepareStackTrace function
   } catch (capture_er) {
     //console.error('= Capture error =')
     error = capture_er
   } finally {
-    Error.prepareStackTrace = old_prep // TODO could this ever fail?
     getting_the_stack = null
+    Error.prepareStackTrace = Error.original_prepareStackTrace // TODO could this ever fail?
+    delete Error.original_prepareStackTrace
   }
 
   if(error)
@@ -75,9 +75,17 @@ function raw_traceback(begin_func) {
 }
 
 
-function prepareStackTrace_raw_stack(er, stack) {
+function return_raw_stack(er, stack) {
   if(getting_the_stack && er === getting_the_stack)
     return stack;
+
+  // At this point something has gone wrong. Try to recover the existing prep function.
+  if(Error.original_prepareStackTrace) {
+    //console.error('Restoring original prepareStackTrace')
+    Error.prepareStackTrace = Error.original_prepareStackTrace
+    delete Error.original_prepareStackTrace
+    return Error.prepareStackTrace(er, stack)
+  }
 
   console.error('TODO returning .stack a second time')
   return "Unknown stack trace";
