@@ -1,5 +1,5 @@
 { "name": "traceback"
-, "version": "0.3.0"
+, "version": "0.3.1"
 , "author": { "name": "Jason Smith" , "email": "jhs@iriscouch.com" }
 , "description": "Easy access to the call stack, written in pure JavaScript"
 , "keywords"   : ["call", "stack", "trace", "stacktrace", "traceback", "debug", "line"]
