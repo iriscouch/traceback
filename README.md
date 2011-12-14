@@ -1,6 +1,6 @@
-# Easy access to the call stack, for Node.js
+# Traceback: easy access to the call stack, for Node.js
 
-Writing a Node app? Need to know functions that called you? `Error` objects can do it. Why can't you?
+Writing a Node app? Need to know the function backtrace? Don't want to compile C++ code? Use Traceback.
 
 Traceback provides a normal JavaScript array of the execution stack frames. You can see function names, line numbers, and other useful stuff.
 
@@ -32,7 +32,7 @@ start();
 
 Output:
 
-    I am last from file test.js
+    I am last from file example.js
       1 above me: second at line 5
       2 above me: first at line 4
       3 above me: start at line 3
