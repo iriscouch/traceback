@@ -39,7 +39,29 @@ Output:
 
 ## Usage
 
-API docs, TODO.
+Simply calling `traceback()` gives you the stack, with the current function in position 0.
+
+Stack frame objects have normal V8 [CallSite][callsite] objects as prototypes. All those methods will work. You can also call `traceback.raw()` to get the exact stack made by V8.
+
+But `traceback()`'s stack frame objects have convenient attribute names:
+
+* **name** | The function name
+* **path** | The absolute path of the file defining the function
+* **file** | The basename of the `path` file (`"example.js"`)
+* **line** | The line number in the file
+* **col** | The column number in the file
+* **pos** | The byte position in the file
+* **fun** | The function itself
+* **method** | If this function was called as a method, the name it is stored as
+* **this** | The object bound to the label `this` in the function
+* **type** | The type of `this`; the name of the constructor function (Object, ReadStream, etc.)
+* **origin** | The `CallSite` that ran `eval()`, if this frame is an eval
+* **is_top** | Boolean indicating whether the function was called with a global `this`
+* **is_eval** | Boolean indicating whether the function comes from an `eval()` call
+* **is_native** | Boolean indicating whether the function is native
+* **is_ctor** | Boolean indicating whether this is a constructor (`new`) call
+
+They also work correctly in `JSON.stringify()`.
 
 ## Tests
 
@@ -57,3 +79,5 @@ Tests use [node-tap][tap]. If you clone this Git repository, tap is included.
 ## License
 
 Apache 2.0
+
+[callsite]: http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
