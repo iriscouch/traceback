@@ -81,3 +81,4 @@ Tests use [node-tap][tap]. If you clone this Git repository, tap is included.
 Apache 2.0
 
 [callsite]: http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
+[tap]: https://github.com/isaacs/node-tap
