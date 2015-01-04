@@ -19,8 +19,10 @@ var frame = require('./lib/frame')
   , v8 = require('./lib/v8')
 
 
-if(Error.prepareStackTrace)
-  throw new Error('Traceback does not support Error.prepareStackTrace being defined already')
+if(Error.prepareStackTrace) {
+  //throw new Error('Traceback does not support Error.prepareStackTrace being defined already')
+  process.stderr.write('WARN: Traceback does not support Error.prepareStackTrace being defined already' + "\n");
+}
 
 // The module API
 module.exports = traceback
