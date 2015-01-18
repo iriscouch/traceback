@@ -1,0 +1,27 @@
+{
+  "name": "traceback",
+  "main": "amd/traceback.js",
+  "version": "0.3.1-1",
+  "homepage": "https://github.com/misak113/traceback",
+  "authors": [
+    "Michael Zabka <zabka.michael@gmail.com>"
+  ],
+  "description": "Easy access to the call stack, written in pure JavaScript",
+  "keywords": [
+    "call",
+    "stack",
+    "trace",
+    "stacktrace",
+    "traceback",
+    "debug",
+    "line"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
